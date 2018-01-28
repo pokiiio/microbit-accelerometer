@@ -11,10 +11,20 @@ const ACCELEROMETER_DATA = "e95dca4b-251d-470a-a062-fa1922dfa9a8";
 const ACCELEROMETER_PERIOD = "e95dfb24-251d-470a-a062-fa1922dfa9a8";
 
 function onClickStartButton() {
+  if (!navigator.bluetooth) {
+    alert("Web Bluetooth is not supported.")
+    return;
+  }
+
   requestDevice();
 }
 
 function onClickStopButton() {
+  if (!navigator.bluetooth) {
+    alert("Web Bluetooth is not supported.")
+    return;
+  }
+
   disconnect();
 }
 
@@ -29,14 +39,14 @@ function requestDevice() {
       connect(targetDevice);
     })
     .catch(error => {
-      showErrorDetail(error);
+      alert(error);
       targetDevice = null;
     });
 }
 
 function disconnect() {
   if (targetDevice == null) {
-    showErrorDetail('target device is null.');
+    alert('target device is null.');
     return;
   }
 
@@ -76,17 +86,13 @@ function updateBackgroundColor(x, y, z) {
   document.getElementsByName("ValueRGB")[0].innerHTML = "#" + strR + strG + strB;
 }
 
-function showErrorDetail(error) {
-  alert(error);
-}
-
 function connect(device) {
   device.gatt.connect()
     .then(server => {
       findAccelerometerService(server);
     })
     .catch(error => {
-      showErrorDetail(error);
+      alert(error);
     });
 }
 
@@ -97,7 +103,7 @@ function findAccelerometerService(server) {
       findAccelerometerPeriodCharacteristic(service);
     })
     .catch(error => {
-      showErrorDetail(error);
+      alert(error);
     });
 }
 
@@ -110,7 +116,7 @@ function findAccelerometerDataCharacteristic(service) {
       startAccelerometerDataNotification(characteristic);
     })
     .catch(error => {
-      showErrorDetail(error);
+      alert(error);
     });
 }
 
@@ -124,7 +130,7 @@ function findAccelerometerDataCharacteristic(service) {
 //       updateBackgroundColor(x, y, z);
 //     })
 //     .catch(error => {
-//       showErrorDetail(error);
+//       alert(error);
 //     });
 // }
 
@@ -150,13 +156,13 @@ function findAccelerometerPeriodCharacteristic(service) {
       writeAccelerometerPeriodValue(characteristic);
     })
     .catch(error => {
-      showErrorDetail(error);
+      alert(error);
     });
 }
 
 function writeAccelerometerPeriodValue(characteristic) {
   characteristic.writeValue(new Uint16Array([10]))
     .catch(error => {
-      showErrorDetail(error);
+      alert(error);
     });
 }
