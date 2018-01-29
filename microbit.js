@@ -161,7 +161,7 @@ function findAccelerometerPeriodCharacteristic(service) {
 }
 
 function writeAccelerometerPeriodValue(characteristic) {
-  characteristic.writeValue(new Uint16Array([10]))
+  characteristic.writeValue(new Uint16Array([160]))
     .catch(error => {
       alert(error);
     });
