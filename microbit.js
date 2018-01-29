@@ -30,9 +30,10 @@ function onClickStopButton() {
 
 function requestDevice() {
   navigator.bluetooth.requestDevice({
-    namePrefix: "BBC micro:bit",
-    acceptAllDevices: true,
-    optionalServices: [ACCELEROMETER_SERVICE]
+    filters: [
+      { services: [ACCELEROMETER_SERVICE] },
+      { namePrefix: "BBC micro:bit" }
+    ]
   })
     .then(device => {
       targetDevice = device;
