@@ -12,7 +12,7 @@ const ACCELEROMETER_PERIOD = "e95dfb24-251d-470a-a062-fa1922dfa9a8";
 
 function onClickStartButton() {
   if (!navigator.bluetooth) {
-    alert("Web Bluetooth is not supported.")
+    showModal("Web Bluetooth is not supported.")
     return;
   }
 
@@ -21,7 +21,7 @@ function onClickStartButton() {
 
 function onClickStopButton() {
   if (!navigator.bluetooth) {
-    alert("Web Bluetooth is not supported.")
+    showModal("Web Bluetooth is not supported.")
     return;
   }
 
@@ -40,14 +40,14 @@ function requestDevice() {
       connect(targetDevice);
     })
     .catch(error => {
-      alert(error);
+      showModal(error);
       targetDevice = null;
     });
 }
 
 function disconnect() {
   if (targetDevice == null) {
-    alert('target device is null.');
+    showModal('The target device is null.');
     return;
   }
 
@@ -83,7 +83,7 @@ function updateBackgroundColor(x, y, z) {
     strB = "0" + strB;
   }
 
-  document.getElementsByClassName("background")[0].style.backgroundColor = "#" + strR + strG + strB;
+  document.body.style.backgroundColor = "#" + strR + strG + strB;
   document.getElementsByName("ValueRGB")[0].innerHTML = "#" + strR + strG + strB;
 }
 
@@ -93,7 +93,7 @@ function connect(device) {
       findAccelerometerService(server);
     })
     .catch(error => {
-      alert(error);
+      showModal(error);
     });
 }
 
@@ -104,7 +104,7 @@ function findAccelerometerService(server) {
       findAccelerometerPeriodCharacteristic(service);
     })
     .catch(error => {
-      alert(error);
+      showModal(error);
     });
 }
 
@@ -117,7 +117,7 @@ function findAccelerometerDataCharacteristic(service) {
       startAccelerometerDataNotification(characteristic);
     })
     .catch(error => {
-      alert(error);
+      showModal(error);
     });
 }
 
@@ -131,7 +131,7 @@ function findAccelerometerDataCharacteristic(service) {
 //       updateBackgroundColor(x, y, z);
 //     })
 //     .catch(error => {
-//       alert(error);
+//       showModal(error);
 //     });
 // }
 
@@ -157,13 +157,18 @@ function findAccelerometerPeriodCharacteristic(service) {
       writeAccelerometerPeriodValue(characteristic);
     })
     .catch(error => {
-      alert(error);
+      showModal(error);
     });
 }
 
 function writeAccelerometerPeriodValue(characteristic) {
   characteristic.writeValue(new Uint16Array([160]))
     .catch(error => {
-      alert(error);
+      showModal(error);
     });
+}
+
+function showModal(message) {
+  document.getElementsByName("modal-message")[0].innerHTML = message;
+  $("#myModal").modal("show");
 }
